@@ -1,0 +1,243 @@
+<!doctype html>
+<html>
+	<head>
+	
+		<title></title>
+ 
+		<meta charset="utf-8" />
+		<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<script type="text/javascript" src="jquery-1.11.1.min.js" ></script>
+		<script type="text/javascript" src="jquery-ui-1.11.1/jquery-ui.min.js" ></script>
+		<link rel="stylesheet" href="codemirror-4.6/lib/codemirror.css">
+		<script src="codemirror-4.6/lib/codemirror.js"></script>
+ 
+		<style type="text/css">
+		
+			html,body{
+				height: 100%;
+				overflow: hidden;
+				margin: 0;
+				padding: 0;
+				font-family: helvetica;
+			}
+			#menuBar{
+				width: 100%;
+				height: 40px;
+				background-color: #e0e0e0;
+			}
+			#logo{
+				
+				font-size: 1.1em;
+				font-weight: bold;
+				padding: 10px 0px 5px 7px;
+				float: left;
+			}
+			#run{
+				float: right;
+				padding: 5px 10px 0 0;
+			}
+			#myButton{
+				background-color: #3DACCF;
+				color: white;
+				font-size: 1.2em;
+				height: 30px;
+				width: 60px;
+				border: none;
+				border-radius: 3px;
+				
+			}
+			#myButton:hover{
+				background-color:#1fc1f2;
+			}
+			#myButton:active{
+				background-color: #3DACCF;
+			}
+			
+			.toggle{
+				
+				padding-top: 5px;
+				padding-left: 0px;
+				width: 250px;
+				
+				margin: 0 auto;
+				
+				
+				
+				
+			}
+			.toggle ul{
+			
+				
+				height: 24px;
+				border-radius: 3px;
+				border: 1px black solid;
+				margin: 0px;
+				float: left;
+				margin-top: 2px;
+				padding-left: 0px;
+				
+			}
+			.toggle li{
+			
+				-webkit-user-select: none;
+				
+				
+				padding-top: 3px;
+				padding-bottom: 3px;
+				list-style: none;
+				float: left;
+				padding-left: 10px;
+				padding-right: 10px;
+				border-right: 1px black solid; 
+
+				}
+			
+			.clearFloat{
+				clear: both;
+			}
+			.codeContainer{
+				float: left;
+				width:100%;
+				height:100%;
+				float: left;
+				position: relative;
+				border: none;
+			}
+			.codeContainer textarea{
+				
+				
+				width: 100%;
+				height: 100%;
+				font-size: 120%;
+				border: none;
+				padding: 0;
+				margin: 0;
+				border-right: 1px black solid;
+				box-sizing: border-box;
+				
+			}
+			.codeLabel{
+				background-color: blue;
+				position: absolute;
+				right: 4px;
+				margin:0;
+				padding: 0;
+			}
+			#HTMLContainer{
+				float: left;
+				
+			}
+			#JSContainer{
+				display: none;
+			}
+			#CSSContainer{
+				display: none;
+			}
+			#ResultContainer{
+				display: none;
+			}
+			iframe{
+				
+				height:100%;
+				width: 100%;
+				position: relative;
+				margin:0;
+				padding: 0;
+				border: none;
+				
+				
+			}
+			.selected{
+				
+				background-color: grey;
+			
+			}
+		
+		</style>
+ 
+	</head>
+ 
+	<body>
+		
+		<div id="wrapper">
+			<div id="menuBar">
+				<div id="logo"  >
+					CodePlayer
+				</div>
+				<div id="run">
+					<button id="myButton">run</button>
+				</div>
+				<div class="toggle">
+					<ul>
+						<li class="toggled selected">HTML</li>
+						<li class="toggled">CSS</li>
+						<li class="toggled">JS</li>
+						<li class="toggled" style="border: none">Result</li>
+					</ul>
+				</div>
+			</div>
+			<div class="clearFloat"></div>
+			
+		</div>
+		
+		<div class="codeContainer" id="HTMLContainer">
+			
+			<textarea placeholder="write some HTML code.." id="htmlCode"></textarea>
+		</div>
+		
+		
+		<div class="codeContainer" id="CSSContainer">
+			
+			<textarea placeholder="write some CSS code.." id="CssCode"></textarea>
+		</div>
+		
+		
+		<div class="codeContainer" id="JSContainer">
+			
+			<textarea placeholder="write some JAVASCRIPT code.." id="jsCode"> alert(":D");</textarea>
+			
+		</div>
+		
+		
+		<div  class="codeContainer" id="ResultContainer">
+			
+			<iframe id="resultFrame"> </iframe>
+			
+		</div>
+		
+		<script type="text/javascript">
+			
+			
+			var windowHeight= $(window).height();
+			var menuBar = $("#menuBar").height();
+			var codeContainerHeight = windowHeight - menuBar-5;
+			$(".codeContainer").height(codeContainerHeight+"px");
+			
+			$(".toggled").click(function(){
+				
+				$(this).toggleClass("selected");
+				$activeDiv = $(this).html();	
+				$('#'+$activeDiv+"Container").toggle();
+				var showDivs = $(".codeContainer").filter(function(){
+				
+					return ($(this).css("display")!="none");
+					
+				}).length;
+				var width = 100/ showDivs;
+				$(".codeContainer").width(width+"%");
+			});
+			$("#myButton").click(function(){
+				
+				$("iframe").contents().find("html").html("<style>"+ $("#CssCode").val()+ "</style>"+$("#htmlCode").val());
+				document.getElementById("resultFrame").contentWindow.eval( $("#jsCode").val() );
+				
+			});
+			
+			
+		</script>
+ 
+	</body>
+
+ 
+ </html>
